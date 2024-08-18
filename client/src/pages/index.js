@@ -5,6 +5,7 @@ import styles from "../app/page.module.css";
 import ModalLogin from '@/app/components/ModalLogin';
 import { useContext, useState } from 'react';
 import { AuthContext } from '@/app/context/LoginContext';
+import Navbar from '@/app/components/Navbar';
 
 
 export default function Home() {
@@ -18,47 +19,51 @@ export default function Home() {
         router.push('/details');
       };
     return (
-        <main className={styles.main}>
-        <div className={styles.description}>
-            <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/app/page.js</code>
-            </p>
-            <div>
-            <a
-                href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                By{" "}
+        <div>
+
+            <Navbar></Navbar>
+            <main className={styles.main}>
+            <div className={styles.description}>
+                <p>
+                Get started by editing&nbsp;
+                <code className={styles.code}>src/app/page.js</code>
+                </p>
+                <div>
+                <a
+                    href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    By{" "}
+                    <Image
+                    src="/vercel.svg"
+                    alt="Vercel Logo"
+                    className={styles.vercelLogo}
+                    width={100}
+                    height={24}
+                    priority
+                    />
+                </a>
+                </div>
+            </div>
+
+            <div className={styles.center}>
                 <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
+                className={styles.logo}
+                src="/next.svg"
+                alt="Next.js Logo"
+                width={180}
+                height={37}
                 priority
                 />
-            </a>
             </div>
-        </div>
 
-        <div className={styles.center}>
-            <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-            />
-        </div>
+            <div className={styles.grid}>
+                <button onClick={()=>logout()} >Go to home</button>
+            </div>
 
-        <div className={styles.grid}>
-            <button onClick={()=>logout()} >Go to home</button>
+            <ModalLogin isOpen={isAuthenticated} onClose={closeModal}/>
+            </main>
         </div>
-
-        <ModalLogin isOpen={isAuthenticated} onClose={closeModal}/>
-        </main>
     );
 }

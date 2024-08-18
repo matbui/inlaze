@@ -17,14 +17,20 @@ export const useFetch = () => {
     });
 
     const logout = () => {
-        localStorage.clear();
-        Swal.fire({
-            title: "",
-            text: "Session Expired",
-            icon: "info"
-        }).then(() => {
-            router.push('/login'); // Redirigir al login después del cierre de sesión
-        });
+        if (localStorage.getItem('token')){
+            localStorage.clear();
+            Swal.fire({
+                title: "",
+                text: "Session Expired",
+                icon: "info"
+            })
+        }else{
+            Swal.fire({
+                title: "",
+                text: "Incorrect username or password",
+                icon: "error"
+            })
+        }
     };
 
     const notPermissions = () => {
@@ -42,8 +48,8 @@ export const useFetch = () => {
             const response = await instance.post(url, body);
             return response;
         } catch (error) {
-            return error.response
             handleApiError(error);
+            return error.response
         }
     };
 
@@ -85,9 +91,9 @@ export const useFetch = () => {
             // Manejo de errores según el código de estado
             const { status } = error.response;
             if (status === 401) { // No autorizado
-                //logout();
+                logout();
             } else if (status === 403) { // Sin permisos
-                //notPermissions();
+                notPermissions();
             } else if (status === 500) { // Error del servidor
                 Swal.fire({
                     title: "Error",

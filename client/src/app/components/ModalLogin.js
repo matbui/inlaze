@@ -10,11 +10,12 @@ export default function ModalLogin({ isOpen, onClose, children }) {
     if (!isOpen) return null;
 
     const { login } = useContext(AuthContext);
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isRegister, setIsRegister] = useState(true);
     const [error, setError] = useState(null);
     const endpoint = "auth/login";
+    const endpointRegister = "auth/register";
     const api = useFetch();
 
     const handleLogin = async (e) => {
@@ -23,12 +24,11 @@ export default function ModalLogin({ isOpen, onClose, children }) {
         
         try {
             const body = {
-                username: username,
+                email: email,
                 password: password
             };
             
             const response = await api.post(endpoint, body);
-            console.log(response);
             if(response.status !== 200){
                 setError(response.data.message); 
                 throw new Error('Login failed');
@@ -43,6 +43,32 @@ export default function ModalLogin({ isOpen, onClose, children }) {
             // setError(err); 
         }
     };
+
+    const handleRegister = async (e)=>{
+        e.preventDefault();
+        setError(null); 
+
+        try {
+            const body = {
+                email: email,
+                password: password
+            };
+            
+            const response = await api.post(endpointRegister, body);
+            if(response.status !== 200){
+                setError(response.data.message); 
+                throw new Error('register failed');
+            }else{
+                const data = await response.data;
+                console.log(data)
+            }
+
+        } catch (err) {
+            console.log(err);
+            // setError(err); 
+        }
+
+    }
 
     const handleRadioChange = (event) => {
         if(event.target.value=="Sign_Up"){
@@ -71,17 +97,35 @@ export default function ModalLogin({ isOpen, onClose, children }) {
                     {
                         isRegister ?
                         <div>
-                            <button>Register with your Email</button>
+                            <form onSubmit={handleRegister}>
+                                <div>
+                                    <label>Email:</label>
+                                    <input
+                                        type="text"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Password:</label>
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </div>
+                                <button type="submit">Register with your Email</button>
+                            </form>
                         </div> :
                         <div>
                             <h2>We love having you back</h2>
                             <form onSubmit={handleLogin}>
                                 <div>
-                                    <label>Username:</label>
+                                    <label>Email:</label>
                                     <input
                                         type="text"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </div>
                                 <div>

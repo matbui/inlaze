@@ -7,17 +7,17 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        setIsAuthenticated(!token); // Si token está vacío, isAuthenticated será true
+        setIsAuthenticated(!token); 
     }, []);
 
     const login = (token) => {
         localStorage.setItem('token', token);
-        setIsAuthenticated(false); // Se cambia a false porque ahora hay un token
+        setIsAuthenticated(false); 
     };
 
     const logout = () => {
         localStorage.removeItem('token');
-        setIsAuthenticated(true); // Se cambia a true porque el token se ha eliminado
+        setIsAuthenticated(true); 
     };
 
     return (

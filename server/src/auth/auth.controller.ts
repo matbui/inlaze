@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -40,4 +41,17 @@ export class AuthController {
     await this.emailConfirmationService.sendVerificationLink(registrationData.email);
     return user;
   }
+
+  @Public()
+  @Post('sendRestorePassword')
+  async sendRestorePassword(@Body() data:{email: string}) {
+    return await this.usersService.sendRestorePassword(data.email);
+  }
+
+  @Public()
+  @Post('restorePassword')
+  async restorePassword(@Body() data: { email: string; token: string; password: string }) {
+    return await this.usersService.restorePassword(data.email, data.token, data.password);
+  }
+  
 }

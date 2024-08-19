@@ -53,8 +53,8 @@ export default function MovieTable() {
   };
 
   const filteredItems = movies?.results?.filter(item => {
-    const genreIds = item.genre_ids || []; // Asegúrate de que genre_ids sea un array
-    const genreId = parseInt(selectedGenre, 10); // Convierte selectedGenre a número
+    const genreIds = item.genre_ids || []; 
+    const genreId = parseInt(selectedGenre, 10); 
     
     const matchesSearchTerm = (item.title && item.title.toLowerCase().includes(searchTerm.toLowerCase()))
       || (item.overview && item.overview.toLowerCase().includes(searchTerm.toLowerCase()))

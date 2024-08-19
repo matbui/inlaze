@@ -6,12 +6,10 @@ import { useRouter } from 'next/router';
 export const useFetch = () => {
     const router = useRouter();
 
-    // Crear instancia de Axios
     const instance = axios.create({
-        baseURL: env.urlBackend, // Asegúrate de que `env.urlBackend` esté correctamente configurado
+        baseURL: env.urlBackend, 
     });
 
-    // Interceptor de solicitudes para agregar el token en cada petición
     instance.interceptors.request.use(
         (config) => {
             const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;

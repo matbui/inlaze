@@ -1,58 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import User from './user.entity';
+import { ConflictException, Injectable } from '@nestjs/common';
+import {User} from '../model/user.model';
+import * as bcrypt from 'bcrypt';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class UsersService {
-  private users = [
-    {
-      id: 1,
-      email: 'john',
-      password: 'changeme',
-      isEmailConfirmed: true
 
-    },
-    {
-      id: 2,
-      email: 'maria',
-      password: 'guess',
-      isEmailConfirmed: true
-    },
-  ];
+  constructor(
+    @InjectModel(User) 
+    private userModel: typeof User
+  ) {}
 
-  async findOne(email: string): Promise<User | undefined> {
-    return this.users.find((user) => user.email === email);
+
+  async findEmail(email: string): Promise<User | undefined> {
+    return this.userModel.findOne({
+      where: { email }
+    });
   }
 
   async getById(id: number): Promise<User | undefined> {
-    return this.users.find((user) => user.id === id);
+    return this.userModel.findOne({
+      where: { id }
+    });
   }
   
   async markEmailAsConfirmed(email: string) {
+    const userByEmail = await this.findEmail(email);
 
-    const userByEmail = await this.findOne(email)
-
-    if(userByEmail){
-      userByEmail.isEmailConfirmed = true
+    if (userByEmail) {
+      await this.userModel.update(
+        { isEmailConfirmed: true }, 
+        { where: { email } }          
+      );
+      userByEmail.isEmailConfirmed = true;
     }
-    
-    return  Boolean(userByEmail)
 
+    return Boolean(userByEmail);
   }
 
-  async register({email , password }){
-    const tempUser = {
-      id: this.users.length+1,
-      email,
-      password,
-      isEmailConfirmed: false
+  async register({ email, password }: { email: string; password: string }): Promise<User> {
+    const existingUser = await this.findEmail(email);
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
     }
-    this.users.push(tempUser)
-    const {
-      password: _,
-      ...registeredUser
-    } = tempUser
-
-    return registeredUser
+  
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return this.userModel.create({ email, password: hashedPassword });
   }
 
 }

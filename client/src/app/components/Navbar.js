@@ -1,12 +1,17 @@
+import { useContext } from "react";
 import Logo from "../assets/img/Logo.png"
-import SignIn from "../assets/img/SignIn.svg"
-import Sun from "../assets/img/Sun.svg"
+import SignIn from "../assets/img/SignIn.svg";
+import Sun from "../assets/img/Sun.svg";
+import { AuthContext } from "../context/LoginContext";
+import Image from 'next/image';
 
 export default function Navbar() {
+
+    const { logout } = useContext(AuthContext);
     return (
         <nav style={navbarStyle}>
             <div style={navbarLogoStyle}>
-                <img src={Logo} alt="Logo" />
+                <Image src={Logo} alt="Logo" />
             </div>
             <ul style={navbarLinksStyle}>
                 <li style={navbarLinksItemStyle}><a href="/" style={navbarLinkStyle}>Popular</a></li>
@@ -19,12 +24,12 @@ export default function Navbar() {
             <ul style={navbarLinksStyle}>
                 <li style={navbarLinksItemStyle}>
                     <button style={iconButtonStyle}>
-                        <img src={Sun} alt="Sun" />
+                        <Image src={Sun} alt="Sun" />
                     </button>
                 </li>
                 <li style={navbarLinksItemStyle}>
-                    <button style={iconButtonStyle}>
-                        <img src={SignIn} alt="Sign In" />
+                    <button style={iconButtonStyle} onClick={()=>logout()}>
+                        <Image src={SignIn} alt="SignIn" />
                     </button>
                 </li>
             </ul>

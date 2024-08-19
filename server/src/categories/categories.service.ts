@@ -3,11 +3,11 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class MoviesService {
+export class CategoriesService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getMovies(page: number = 1): Promise<any> {
-    const url = 'https://api.themoviedb.org/3/trending/movie/day'; 
+  async getCategories(): Promise<any> {
+    const url = 'https://api.themoviedb.org/3/genre/movie/list'; 
     try {
         const response = await firstValueFrom(this.httpService.get(url, {
             headers: {
@@ -16,7 +16,6 @@ export class MoviesService {
             },
             params: {
               language: 'en-US',
-              page: page,
             },
         }));
         return response.data;

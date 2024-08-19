@@ -1,22 +1,30 @@
+/* page.module.css */
+
 .main {
+  background-color: #121212;
+  color: #EAEAEA; 
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  padding: 1rem;
 }
 
 .description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
+  margin-bottom: 2rem;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.logo {
+  filter: brightness(0) invert(1); 
+}
+
 
 .description a {
   display: flex;

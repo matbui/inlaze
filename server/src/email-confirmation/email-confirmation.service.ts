@@ -34,11 +34,11 @@ export class EmailConfirmationService {
   }
 
   public async confirmEmail(email: string) {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findEmail(email);
     if (user.isEmailConfirmed) {
       throw new BadRequestException('Email already confirmed');
     }
-    await this.usersService.markEmailAsConfirmed(email);
+    return await this.usersService.markEmailAsConfirmed(email);
   }
  
   public async decodeConfirmationToken(token: string) {

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,9 +12,33 @@ import { EmailService } from './email/email.service';
 import { EmailConfirmationController } from './email-confirmation/email-confirmation.controller';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
 import { EmailModule } from './email/email.module';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UsersModule, MoviesModule, EmailConfirmationModule, EmailModule],
+  imports: [
+    ConfigModule.forRoot(),
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        dialect: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        autoLoadModels: true,
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule,
+    UsersModule,
+    MoviesModule,
+    EmailConfirmationModule,
+    EmailModule,
+    CategoriesModule,
+  ],
   controllers: [AppController, EmailConfirmationController],
   providers: [
     {
